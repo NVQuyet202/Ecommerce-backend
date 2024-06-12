@@ -9,16 +9,15 @@ const authMiddleWare = (req, res, next) => {
     if (err) {
       return res.status(404).json({
         message: "The authemtication",
-        status: "ERROR",
+        status: "ERR",
       });
     }
-    const { payload } = user;
-    if (payload?.isAdmin || payload?.id === userId) {
+    if (user?.isAdmin) {
       next();
     } else {
       return res.status(404).json({
         message: "The authemtication",
-        status: "ERROR",
+        status: "ERR",
       });
     }
   });
@@ -31,16 +30,16 @@ const authUserMiddleWare = (req, res, next) => {
     if (err) {
       return res.status(404).json({
         message: "The authemtication",
-        status: "ERROR",
+        status: "ERR",
       });
     }
-    const { payload } = user;
-    if (payload?.isAdmin || payload?.id === userId) {
+    console.log(user);
+    if (user?.isAdmin || user?.id === userId) {
       next();
     } else {
       return res.status(404).json({
         message: "The authemtication",
-        status: "ERROR",
+        status: "ERR",
       });
     }
   });
