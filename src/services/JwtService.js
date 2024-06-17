@@ -35,15 +35,14 @@ const refreshTokenService = (token) => {
           });
         }
 
-        const { payload } = user;
-        const access_Token = await generalAccessToken({
-          id: payload?.id,
-          isAdmin: payload?.isAdmin,
+        const access_token = await generalAccessToken({
+          id: user?.id,
+          isAdmin: user?.isAdmin,
         });
         resolve({
           status: "OK",
           message: " Success",
-          access_Token,
+          access_token,
         });
       });
     } catch (e) {

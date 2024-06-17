@@ -51,8 +51,10 @@ const loginUser = async (req, res) => {
     const respone = await UserService.loginUser(req.body);
     const { refresh_token, ...newRespone } = respone;
     res.cookie("refresh_token", refresh_token, {
-      HttpOnly: true,
-      Secure: true,
+      httpOnly: true,
+      secure: false,
+      samsite: "strict",
+      path: "/",
     });
     return res.status(200).json(newRespone);
   } catch (e) {
@@ -114,7 +116,6 @@ const getAllUser = async (req, res) => {
 const getDetailsUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    console.log(userId);
     if (!userId) {
       return res.status(200).json({
         status: "ERR",
@@ -133,9 +134,9 @@ const getDetailsUser = async (req, res) => {
 };
 
 const refreshToken = async (req, res) => {
-  console.log(req.cookies);
   try {
     const token = req.cookies.refresh_token;
+
     if (!token) {
       return res.status(200).json({
         status: "ERR",
@@ -152,6 +153,20 @@ const refreshToken = async (req, res) => {
   }
 };
 
+const logoutUser = async (req, res) => {
+  try {
+    res.clearCookie("refresh_token");
+    return res.status(200).json({
+      status: "OK",
+      message: "Logout Success",
+    });
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -160,4 +175,5 @@ module.exports = {
   getAllUser,
   getDetailsUser,
   refreshToken,
+  logoutUser,
 };
