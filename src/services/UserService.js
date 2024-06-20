@@ -89,7 +89,6 @@ const updateUser = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const checkUser = await User.findOne({ _id: id });
-      console.log(checkUser);
       if (checkUser === null) {
         resolve({
           status: "OK",

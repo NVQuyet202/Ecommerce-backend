@@ -67,15 +67,16 @@ const loginUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    const data = req.body;
+    const userData = req.body;
     if (!userId) {
       return res.status(200).json({
         status: "ERR",
         message: "The userId is required",
       });
     }
-    const respone = await UserService.updateUser(userId, data);
-    return res.status(200).json(respone);
+    const respone = await UserService.updateUser(userId, userData);
+    const { data, ...rests } = respone;
+    return res.status(200).json(rests);
   } catch (e) {
     return res.status(404).json({
       message: e,
