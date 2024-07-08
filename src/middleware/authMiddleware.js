@@ -3,11 +3,18 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const authMiddleWare = (req, res, next) => {
-  const token = req.headers.token.split(" ")[1];
+  const authorizationHeader = req.headers.authorization;
+  if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+    return res.status(401).json({
+      status: "ERR",
+      message: "Unauthorized access",
+    });
+  }
+  const token = authorizationHeader.split(" ")[1];
   jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
     if (err) {
       return res.status(404).json({
-        message: "The authemtication",
+        message: `The authemtication ${err}`,
         status: "ERR",
       });
     }

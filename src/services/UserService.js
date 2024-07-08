@@ -96,7 +96,11 @@ const updateUser = (id, data) => {
         });
       }
 
-      const updateUser = await User.findByIdAndUpdate(id, data, { new: true });
+      const { stateUserDetail } = data;
+
+      const updateUser = await User.findByIdAndUpdate(id, stateUserDetail, {
+        new: true,
+      });
 
       resolve({
         status: "OK",
@@ -171,6 +175,23 @@ const getDetailsUser = (id) => {
   });
 };
 
+const deleteManyUser = (ids) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await User.deleteMany({ _id: ids });
+
+      resolve({
+        status: "OK",
+        message: "Delete users success",
+      });
+
+      resolve({});
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -178,4 +199,5 @@ module.exports = {
   deleteUser,
   getAllUser,
   getDetailsUser,
+  deleteManyUser,
 };

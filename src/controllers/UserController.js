@@ -4,7 +4,7 @@ const JwtService = require("../services/JwtService");
 
 const createUser = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword, phone } = req.body;
+    const { email, password, confirmPassword } = req.body;
     const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
     const isCheckEmail = reg.test(email);
     if (!email || !password || !confirmPassword) {
@@ -168,6 +168,24 @@ const logoutUser = async (req, res) => {
   }
 };
 
+const deleteManyUser = async (req, res) => {
+  try {
+    const userIds = req.body;
+    if (!userIds) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "The userIds is required",
+      });
+    }
+    const respone = await UserService.deleteManyUser(userIds);
+    return res.status(200).json(respone);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -177,4 +195,5 @@ module.exports = {
   getDetailsUser,
   refreshToken,
   logoutUser,
+  deleteManyUser,
 };

@@ -49,11 +49,15 @@ const updateProduct = (id, data) => {
           message: "The product is not defined",
         });
       }
+      const { stateProductDetail } = data;
 
-      const updateProduct = await Product.findByIdAndUpdate(id, data, {
-        new: true,
-      });
-
+      const updateProduct = await Product.findByIdAndUpdate(
+        id,
+        stateProductDetail,
+        {
+          new: true,
+        }
+      );
       resolve({
         status: "OK",
         message: "Success",
@@ -105,7 +109,7 @@ const getAllProduct = (limit, page, sort, filter) => {
 
         resolve({
           status: "OK",
-          message: "Get allUser success",
+          message: "Get allProduct success",
           data: allProductFilter,
           total: totalProduct,
           pageCurrent: Number(page + 1),
@@ -172,10 +176,26 @@ const getDetailProduct = (id) => {
   });
 };
 
+const deleteManyProduct = (ids) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await Product.deleteMany({ _id: ids });
+
+      resolve({
+        status: "OK",
+        message: "Delete Products success",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   createProduct,
   updateProduct,
   getDetailProduct,
   deleteProduct,
   getAllProduct,
+  deleteManyProduct,
 };
